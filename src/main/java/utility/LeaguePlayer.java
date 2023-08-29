@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class LeaguePlayer extends AccessApi{
+public class LeaguePlayer{
 
     private int level;
     private String summonerName;
@@ -16,12 +16,15 @@ public class LeaguePlayer extends AccessApi{
     private int normalWins;
     private int normalLosses;
     private String encryptedSummonerID;
+    private AccessApi access = new AccessApi();
+    private SummonerFactory summonerGetter = new SummonerFactory();
 
-    public LeaguePlayer(String encryptedSummonerID) {
-        this.encryptedSummonerID = encryptedSummonerID;
-        setBASE_URL("https://na1.api.riotgames.com");
-        setEND_POINT("/lol/league/v4/entries/by-summoner/");
-        initPlayer((JSONArray) accessApi(encryptedSummonerID));
+    public LeaguePlayer(String summonerName) {
+        this.summonerName = summonerName;
+        encryptedSummonerID = summonerGetter.getAccountId(summonerName);
+        access.setBASE_URL("https://na1.api.riotgames.com");
+        access.setEND_POINT("/lol/league/v4/entries/by-summoner/");
+        initPlayer((JSONArray) access.accessApi(encryptedSummonerID));
     }
 
     private void initPlayer(JSONArray playerData) {

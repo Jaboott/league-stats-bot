@@ -4,7 +4,7 @@ import org.json.JSONArray;
 
 import java.io.IOException;
 
-public abstract class AccessApi {
+public class AccessApi {
 
     private String BASE_URL;
     private String END_POINT;
