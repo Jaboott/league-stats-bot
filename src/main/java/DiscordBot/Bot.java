@@ -1,5 +1,6 @@
 package DiscordBot;
 
+import LeagueObjects.LeaguePlayer;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
@@ -12,8 +13,11 @@ import utility.KeyHandler;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Bot extends ListenerAdapter {
+
+    LeaguePlayer currPlayer;
 
     public static void main(String[] args) {
         Bot bot = new Bot();
@@ -29,8 +33,19 @@ public class Bot extends ListenerAdapter {
         Message message = event.getMessage();
         String content = message.getContentRaw();
         MessageChannel channel = event.getChannel();
-        if (content.equals("!ping")) {
-            channel.sendMessage("Pong!").queue();
+        if (content.startsWith("!searchPlayer")) {
+            currPlayer = new LeaguePlayer(content.replaceFirst("!searchPlayer", ""));
+            channel.sendMessage(currPlayer.toString()).queue();
+        } else if (content.startsWith("!recentGames")) {
+            ArrayList<String> tempMatchList = currPlayer.getMatchHistory(3, false);
+            for (String match : tempMatchList) {
+                channel.sendMessage(match).queue();
+            }
+        } else if (content.startsWith("!detailedRecentGames")) {
+            ArrayList<String> tempMatchList = currPlayer.getMatchHistory(3, true);
+            for (String match : tempMatchList) {
+                channel.sendMessage(match).queue();
+            }
         }
     }
 
