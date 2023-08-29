@@ -4,13 +4,12 @@ import java.io.IOException;
 
 public class AccessApi {
 
-    private final String baseUrl = "https://na1.api.riotgames.com";;
-    private String endPoint;
+    private final String baseUrl = "https://na1.api.riotgames.com";
 
-    public Object accessApi(String encryptedSummonerID) {
+    public Object accessApi(String baseUrl, String someId, String field, String endPoint) {
         try {
             Object playerData = UrlReader.readJsonFromUrl
-                    (baseUrl + endPoint + encryptedSummonerID + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
+                    (baseUrl + endPoint + someId + field + "api_key=" + KeyHandler.getKey("RiotApiKey"));
             return playerData;
         } catch (IOException e) {
             e.printStackTrace();
@@ -18,7 +17,15 @@ public class AccessApi {
         return null;
     }
 
-    public void setEndPoint(String endPoint) {
-        this.endPoint = endPoint;
+    public Object accessApi(String baseUrl, String someId, String endPoint) {
+        try {
+            Object playerData = UrlReader.readJsonFromUrl
+                    (baseUrl + endPoint + someId  + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
+            return playerData;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 }

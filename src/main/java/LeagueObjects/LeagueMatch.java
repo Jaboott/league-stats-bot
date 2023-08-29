@@ -1,5 +1,6 @@
 package LeagueObjects;
 
+import org.json.JSONArray;
 import utility.AccessApi;
 import utility.SummonerInfoGetter;
 
@@ -14,8 +15,10 @@ public class LeagueMatch extends SummonerInfoGetter{
     private AccessApi access = new AccessApi();
     // Todo: make it so it shows all the player in the game, who won, what their highest mastery are.
 
-    public LeagueMatch() {
-        setEndPoint();
+    public JSONArray getMatches(String summonerName, int numGames) {
+        JSONArray matchList = (JSONArray) accessApi("https://americas.api.riotgames.com" ,getPuuid(summonerName),
+                "/ids?type=ranked&start=0&count=" + numGames + "&", "/lol/match/v5/matches/by-puuid/");
+        return matchList;
     }
 
 

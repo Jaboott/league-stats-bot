@@ -21,8 +21,7 @@ public class LeaguePlayer extends SummonerInfoGetter{
         summonerName = summonerName.replaceAll(" ", "");
         this.summonerName = summonerName;
         encryptedSummonerID = getAccountId(summonerName);
-        setEndPoint("/lol/league/v4/entries/by-summoner/");
-        initPlayer((JSONArray) accessApi(encryptedSummonerID));
+        initPlayer((JSONArray) accessApi("https://na1.api.riotgames.com", encryptedSummonerID, "/lol/league/v4/entries/by-summoner/"));
     }
 
     private void initPlayer(JSONArray playerData) {
