@@ -20,10 +20,10 @@ public class SummonerInfoGetter extends AccessApi{
         return puuid;
     }
 
-    public String getAccountName(String puuid) {
-        JSONObject jsonObject = (JSONObject) accessApi(BASE_URL, "/lol/summoner/v4/summoners/by-puuid/", puuid);
-        String accountName = jsonObject.getString("name").replaceAll(" ", "");
-        return accountName;
+    public int getLevel(String summonerName) {
+        JSONObject jsonObject = (JSONObject) accessApi(BASE_URL, END_POINT, summonerName);
+        int level = jsonObject.getInt("summonerLevel");
+        return level;
     }
 
     // Todo: make it return a list of Match instead
