@@ -74,18 +74,20 @@ public class LeaguePlayer extends SummonerInfoGetter{
         }
     }
 
-    public void getMatchHistory(int numMatchHistory, boolean detailedMatch) {
+    public ArrayList<String> getMatchHistory(int numMatchHistory, boolean detailedMatch) {
+        ArrayList<String> tempMatchList = new ArrayList<>();
         JSONArray recentMatches = getMatches(summonerName.replaceAll(" ", ""), numMatchHistory);
         for (int i = 0; i < recentMatches.length(); i++) {
-            System.out.println("match:" + (i + 1));
+            tempMatchList.add("match:" + (i + 1) + "\n");
             String matchId = recentMatches.getString(i);
             LeagueMatch match = new LeagueMatch(matchId);
             if (detailedMatch) {
-                System.out.println(match.getMatch());
+                tempMatchList.add(match.getMatch().toString() + "\n");
             } else {
-                System.out.println(match.getPlayerStat(encryptedSummonerID));
+                tempMatchList.add(match.getPlayerStat(encryptedSummonerID).toString() + "\n");
             }
         }
+        return tempMatchList;
     }
 
     @Override
