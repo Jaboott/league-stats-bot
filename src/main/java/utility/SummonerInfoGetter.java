@@ -2,13 +2,12 @@ package utility;
 
 import org.json.JSONObject;
 
-public class SummonerFactory{
+public class SummonerInfoGetter {
 
     private AccessApi access = new AccessApi();
 
-    public SummonerFactory() {
-        access.setBASE_URL("https://na1.api.riotgames.com");
-        access.setEND_POINT("/lol/summoner/v4/summoners/by-name/");
+    public SummonerInfoGetter() {
+        access.setEndPoint("/lol/summoner/v4/summoners/by-name/");
     }
 
     public String getAccountId(String summonerName) {

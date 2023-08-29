@@ -1,18 +1,20 @@
 package utility;
 
-import org.json.JSONArray;
-
 import java.io.IOException;
 
 public class AccessApi {
 
-    private String BASE_URL;
-    private String END_POINT;
+    private String baseUrl;
+    private String endPoint;
+
+    public AccessApi() {
+        baseUrl = "https://na1.api.riotgames.com";
+    }
 
     public Object accessApi(String encryptedSummonerID) {
         try {
             Object playerData = UrlReader.readJsonFromUrl
-                    (BASE_URL + END_POINT + encryptedSummonerID + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
+                    (baseUrl + endPoint + encryptedSummonerID + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
             return playerData;
         } catch (IOException e) {
             e.printStackTrace();
@@ -20,11 +22,11 @@ public class AccessApi {
         return null;
     }
 
-    public void setBASE_URL(String BASE_URL) {
-        this.BASE_URL = BASE_URL;
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
-    public void setEND_POINT(String END_POINT) {
-        this.END_POINT = END_POINT;
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
     }
 }

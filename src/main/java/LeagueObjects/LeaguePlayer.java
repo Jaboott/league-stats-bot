@@ -1,9 +1,9 @@
-package utility;
+package LeagueObjects;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
+import utility.AccessApi;
+import utility.SummonerInfoGetter;
 
 public class LeaguePlayer{
 
@@ -17,13 +17,13 @@ public class LeaguePlayer{
     private int normalLosses;
     private String encryptedSummonerID;
     private AccessApi access = new AccessApi();
-    private SummonerFactory summonerGetter = new SummonerFactory();
+    private SummonerInfoGetter summonerGetter = new SummonerInfoGetter();
 
     public LeaguePlayer(String summonerName) {
+        summonerName = summonerName.replaceAll(" ", "");
         this.summonerName = summonerName;
         encryptedSummonerID = summonerGetter.getAccountId(summonerName);
-        access.setBASE_URL("https://na1.api.riotgames.com");
-        access.setEND_POINT("/lol/league/v4/entries/by-summoner/");
+        access.setEndPoint("/lol/league/v4/entries/by-summoner/");
         initPlayer((JSONArray) access.accessApi(encryptedSummonerID));
     }
 
