@@ -21,6 +21,7 @@ public class LeaguePlayer extends SummonerInfoGetter{
     private String encryptedSummonerID;
     private List<LeagueMatch> matches = new ArrayList<>();
 
+
     public LeaguePlayer(String summonerName) {
         summonerName = summonerName.replaceAll(" ", "");
         this.summonerName = summonerName;
@@ -61,8 +62,12 @@ public class LeaguePlayer extends SummonerInfoGetter{
 
     @Override
     public String toString() {
-        return "summonerID: %s \n summonerName: %s, summonerLevel: %d \n rank: %s, lp: %d \n rankedWins: %d, rankedLosses: %d \n normalWins: %d, normalLosses: %d, normal win rate for the past %d games: %d%%\n".formatted(
-                encryptedSummonerID ,summonerName, level, rank, leaguePoint, rankedWins, rankedLosses, normalWins, normalLosses, normalLosses + normalWins,
-                Math.round(((double) normalWins / (double)(normalLosses + normalWins)) * 100));
+        return "summonerID: %s \n".formatted(encryptedSummonerID ) +
+                "summonerName: %s, summonerLevel: %d \n".formatted(summonerName, level) +
+                "rank: %s, lp: %d \n".formatted(rank, leaguePoint) +
+                "rankedWins: %d, rankedLosses: %d, ranked win rate for the past %d games: %d%%\n".formatted( rankedWins, rankedLosses, rankedWins + rankedLosses,
+                        Math.round(((double) rankedWins / (double)(rankedLosses + rankedWins)) * 100)) +
+                "normalWins: %d, normalLosses: %d, normal win rate for the past %d games: %d%%\n".formatted(normalWins, normalLosses, normalLosses + normalWins,
+                        Math.round(((double) normalWins / (double)(normalLosses + normalWins)) * 100));
     }
 }

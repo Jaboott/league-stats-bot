@@ -50,7 +50,11 @@ public class LeagueMatch extends SummonerInfoGetter{
 
     @Override
     public String toString() {
-        return "wonTeam:" + "\n" + wonTeam + "\n" +
-                "lostTeam:" + "\n" + lostTeam + "\n";
+        StringBuilder wonTeamString = new StringBuilder();
+        wonTeam.forEach((k,v) -> wonTeamString.append(wonTeam.get(k)));
+        StringBuilder lostTeamString = new StringBuilder();
+        lostTeam.forEach((k,v) -> lostTeamString.append(lostTeam.get(k)));
+        return "wonTeam:" + "\n" + wonTeamString + "\n" +
+                "lostTeam:" + "\n" + lostTeamString + "\n";
     }
 }

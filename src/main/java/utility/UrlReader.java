@@ -9,7 +9,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class UrlReader {
-    public static Object readJsonFromUrl(String url) throws IOException, JSONException {
+    protected static Object readJsonFromUrl(String url) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")))){
             String jsonText = readAll(br);
