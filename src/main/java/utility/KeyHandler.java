@@ -17,6 +17,5 @@ public class KeyHandler {
             JSONObject jsonObject = new JSONObject(sb.toString());
             return (String) jsonObject.get(key);
         }
-
     }
 }

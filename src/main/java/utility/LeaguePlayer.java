@@ -17,16 +17,7 @@ public class LeaguePlayer{
     private int normalLosses;
     private final String BASE_URL = "https://na1.api.riotgames.com";
     private final String END_POINT = "/lol/league/v4/entries/by-summoner/";
-    private String API_KEY;
     private String encryptedSummonerID;
-
-    {
-        try {
-            API_KEY = KeyHandler.getKey("RiotApiKey");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public LeaguePlayer(String encryptedSummonerID) {
         this.encryptedSummonerID = encryptedSummonerID;
@@ -36,7 +27,7 @@ public class LeaguePlayer{
     private JSONArray accessApi(String encryptedSummonerID) {
         try {
             JSONArray playerData = (JSONArray) UrlReader.readJsonFromUrl
-                    (BASE_URL + END_POINT + encryptedSummonerID + "?api_key=" + API_KEY);
+                    (BASE_URL + END_POINT + encryptedSummonerID + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
             return playerData;
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +53,8 @@ public class LeaguePlayer{
 
     @Override
     public String toString() {
-        return "summonerID: %s \n summonerName: %s \n rank: %s, lp: %d \n rankedWins: %d, rankedLosses: %d \n normalWins: %d, normalLosses: %d".formatted(
-                encryptedSummonerID ,summonerName, rank, leaguePoint, rankedWins, rankedLosses, normalWins, normalLosses);
+        return "summonerID: %s \n summonerName: %s \n rank: %s, lp: %d \n rankedWins: %d, rankedLosses: %d \n normalWins: %d, normalLosses: %d, normal win rate for the past %d games: %d%%".formatted(
+                encryptedSummonerID ,summonerName, rank, leaguePoint, rankedWins, rankedLosses, normalWins, normalLosses, normalLosses + normalWins,
+                Math.round(((double) normalWins / (normalLosses + normalWins)) * 100));
     }
 }
