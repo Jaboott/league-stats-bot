@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class LeaguePlayer{
+public class LeaguePlayer extends AccessApi{
 
     private int level;
     private String summonerName;
@@ -15,24 +15,13 @@ public class LeaguePlayer{
     private int rankedLosses;
     private int normalWins;
     private int normalLosses;
-    private final String BASE_URL = "https://na1.api.riotgames.com";
-    private final String END_POINT = "/lol/league/v4/entries/by-summoner/";
     private String encryptedSummonerID;
 
     public LeaguePlayer(String encryptedSummonerID) {
         this.encryptedSummonerID = encryptedSummonerID;
-        initPlayer(accessApi(encryptedSummonerID));
-    }
-
-    private JSONArray accessApi(String encryptedSummonerID) {
-        try {
-            JSONArray playerData = (JSONArray) UrlReader.readJsonFromUrl
-                    (BASE_URL + END_POINT + encryptedSummonerID + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
-            return playerData;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        setBASE_URL("https://na1.api.riotgames.com");
+        setEND_POINT("/lol/league/v4/entries/by-summoner/");
+        initPlayer((JSONArray) accessApi(encryptedSummonerID));
     }
 
     private void initPlayer(JSONArray playerData) {
@@ -51,10 +40,15 @@ public class LeaguePlayer{
         }
     }
 
+    // Todo
+    public void getMatchHistory() {
+
+    }
+
     @Override
     public String toString() {
         return "summonerID: %s \n summonerName: %s \n rank: %s, lp: %d \n rankedWins: %d, rankedLosses: %d \n normalWins: %d, normalLosses: %d, normal win rate for the past %d games: %d%%".formatted(
                 encryptedSummonerID ,summonerName, rank, leaguePoint, rankedWins, rankedLosses, normalWins, normalLosses, normalLosses + normalWins,
-                Math.round(((double) normalWins / (normalLosses + normalWins)) * 100));
+                Math.round(((double) normalWins / (double)(normalLosses + normalWins)) * 100));
     }
 }
