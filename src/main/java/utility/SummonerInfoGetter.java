@@ -32,7 +32,11 @@ public class SummonerInfoGetter extends AccessApi{
         return matchList;
     }
 
-    //protected JSONArray
+    protected JSONArray getTopChampions(String summonerName) {
+        JSONArray topChampions = (JSONArray) accessApi("https://na1.api.riotgames.com" ,"/lol/champion-mastery/v4/champion-masteries/by-summoner/"
+                ,getAccountId(summonerName), "/top?");
+        return topChampions;
+    }
 
 
 }
