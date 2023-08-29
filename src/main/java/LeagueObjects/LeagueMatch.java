@@ -5,7 +5,7 @@ import utility.SummonerInfoGetter;
 
 import java.util.List;
 
-public class LeagueMatch{
+public class LeagueMatch extends SummonerInfoGetter{
 
     private List<LeaguePlayer> redTeam;
     private List<LeaguePlayer> blueTeam;
@@ -15,7 +15,7 @@ public class LeagueMatch{
     // Todo: make it so it shows all the player in the game, who won, what their highest mastery are.
 
     public LeagueMatch() {
-        access.setEndPoint();
+        setEndPoint();
     }
 
 

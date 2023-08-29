@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import utility.AccessApi;
 import utility.SummonerInfoGetter;
 
-public class LeaguePlayer{
+public class LeaguePlayer extends SummonerInfoGetter{
 
     private int level;
     private String summonerName;
@@ -16,15 +16,13 @@ public class LeaguePlayer{
     private int normalWins;
     private int normalLosses;
     private String encryptedSummonerID;
-    private AccessApi access = new AccessApi();
-    private SummonerInfoGetter summonerGetter = new SummonerInfoGetter();
 
     public LeaguePlayer(String summonerName) {
         summonerName = summonerName.replaceAll(" ", "");
         this.summonerName = summonerName;
-        encryptedSummonerID = summonerGetter.getAccountId(summonerName);
-        access.setEndPoint("/lol/league/v4/entries/by-summoner/");
-        initPlayer((JSONArray) access.accessApi(encryptedSummonerID));
+        encryptedSummonerID = getAccountId(summonerName);
+        setEndPoint("/lol/league/v4/entries/by-summoner/");
+        initPlayer((JSONArray) accessApi(encryptedSummonerID));
     }
 
     private void initPlayer(JSONArray playerData) {

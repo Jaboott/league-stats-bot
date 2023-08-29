@@ -4,12 +4,8 @@ import java.io.IOException;
 
 public class AccessApi {
 
-    private String baseUrl;
+    private final String baseUrl = "https://na1.api.riotgames.com";;
     private String endPoint;
-
-    public AccessApi() {
-        baseUrl = "https://na1.api.riotgames.com";
-    }
 
     public Object accessApi(String encryptedSummonerID) {
         try {
@@ -20,10 +16,6 @@ public class AccessApi {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
     }
 
     public void setEndPoint(String endPoint) {
