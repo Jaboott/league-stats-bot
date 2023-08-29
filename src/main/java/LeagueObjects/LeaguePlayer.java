@@ -5,8 +5,11 @@ import org.json.JSONObject;
 import utility.AccessApi;
 import utility.SummonerInfoGetter;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class LeaguePlayer extends SummonerInfoGetter{
 
@@ -18,8 +21,8 @@ public class LeaguePlayer extends SummonerInfoGetter{
     private int rankedLosses;
     private int normalWins;
     private int normalLosses;
+    private List<String> topChampions;
     private String encryptedSummonerID;
-    private List<LeagueMatch> matches = new ArrayList<>();
 
 
     public LeaguePlayer(String summonerName) {
@@ -33,6 +36,8 @@ public class LeaguePlayer extends SummonerInfoGetter{
     private void initPlayer(JSONArray playerData) {
         for(int i = 0; i < playerData.length(); i++) {
             JSONObject jsonObject = playerData.getJSONObject(i);
+            topChampions = new ArrayList<>();
+            getTopChampions();
             if (jsonObject.getString("queueType").equals("RANKED_SOLO_5x5")) {
                 rank = jsonObject.getString("tier") + " " + jsonObject.getString("rank");
                 leaguePoint = jsonObject.getInt("leaguePoints");
@@ -43,6 +48,24 @@ public class LeaguePlayer extends SummonerInfoGetter{
                 normalLosses = jsonObject.getInt("losses");
                 summonerName = jsonObject.getString("summonerName");
             }
+        }
+    }
+
+    private void getTopChampions() {
+        JSONArray topChampionList = getTopChampions(summonerName);
+
+        StringBuilder sb = new StringBuilder();
+        try (Scanner scanner = new Scanner(new FileReader("championJson.json"))){
+            while (scanner.hasNext()) {
+                sb.append(scanner.next());
+            }
+            JSONObject champions = new JSONObject(sb.toString());
+            for (int i = 0; i < topChampionList.length(); i++) {
+                int championId = topChampionList.getJSONObject(i).getInt("championId");
+                topChampions.add(champions.getString(String.valueOf(championId)));
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -62,8 +85,11 @@ public class LeaguePlayer extends SummonerInfoGetter{
 
     @Override
     public String toString() {
+        StringBuilder topChampion = new StringBuilder();
+        topChampions.forEach(s -> topChampion.append(s + ", "));
+
         return "summonerID: %s \n".formatted(encryptedSummonerID ) +
-                "summonerName: %s, summonerLevel: %d \n".formatted(summonerName, level) +
+                "summonerName: %s, summonerLevel: %d , top champions: %s\n".formatted(summonerName, level, topChampion) +
                 "rank: %s, lp: %d \n".formatted(rank, leaguePoint) +
                 "rankedWins: %d, rankedLosses: %d, ranked win rate for the past %d games: %d%%\n".formatted( rankedWins, rankedLosses, rankedWins + rankedLosses,
                         Math.round(((double) rankedWins / (double)(rankedLosses + rankedWins)) * 100)) +
