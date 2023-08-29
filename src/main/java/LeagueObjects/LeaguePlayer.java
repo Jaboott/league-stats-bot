@@ -26,11 +26,16 @@ public class LeaguePlayer extends SummonerInfoGetter{
 
 
     public LeaguePlayer(String summonerName) {
-        summonerName = summonerName.replaceAll(" ", "");
-        this.summonerName = summonerName;
-        encryptedSummonerID = getAccountId(summonerName);
-        level = getLevel(summonerName);
-        initPlayer((JSONArray) accessApi("https://na1.api.riotgames.com","/lol/league/v4/entries/by-summoner/", encryptedSummonerID));
+        if (playerExist(summonerName.replace(" ", ""))) {
+            this.summonerName = summonerName;
+            summonerName = summonerName.replaceAll(" ", "");
+            encryptedSummonerID = getAccountId(summonerName);
+            level = getLevel(summonerName);
+            initPlayer((JSONArray) accessApi("https://na1.api.riotgames.com","/lol/league/v4/entries/by-summoner/", encryptedSummonerID));
+        } else {
+            System.out.println("Player doesn't exist");
+        }
+
     }
 
     private void initPlayer(JSONArray playerData) {
@@ -52,7 +57,7 @@ public class LeaguePlayer extends SummonerInfoGetter{
     }
 
     private void getTopChampions() {
-        JSONArray topChampionList = getTopChampions(summonerName);
+        JSONArray topChampionList = getTopChampions(summonerName.replaceAll(" ", ""));
 
         StringBuilder sb = new StringBuilder();
         try (Scanner scanner = new Scanner(new FileReader("championJson.json"))){
@@ -70,7 +75,7 @@ public class LeaguePlayer extends SummonerInfoGetter{
     }
 
     public void getMatchHistory(int numMatchHistory, boolean detailedMatch) {
-        JSONArray recentMatches = getMatches(summonerName, numMatchHistory);
+        JSONArray recentMatches = getMatches(summonerName.replaceAll(" ", ""), numMatchHistory);
         for (int i = 0; i < recentMatches.length(); i++) {
             System.out.println("match:" + (i + 1));
             String matchId = recentMatches.getString(i);
@@ -85,15 +90,21 @@ public class LeaguePlayer extends SummonerInfoGetter{
 
     @Override
     public String toString() {
-        StringBuilder topChampion = new StringBuilder();
-        topChampions.forEach(s -> topChampion.append(s + ", "));
+        try {
+            StringBuilder topChampion = new StringBuilder();
+            topChampions.forEach(s -> topChampion.append(s + ", "));
 
-        return "summonerID: %s \n".formatted(encryptedSummonerID ) +
-                "summonerName: %s, summonerLevel: %d , top champions: %s\n".formatted(summonerName, level, topChampion) +
-                "rank: %s, lp: %d \n".formatted(rank, leaguePoint) +
-                "rankedWins: %d, rankedLosses: %d, ranked win rate for the past %d games: %d%%\n".formatted( rankedWins, rankedLosses, rankedWins + rankedLosses,
-                        Math.round(((double) rankedWins / (double)(rankedLosses + rankedWins)) * 100)) +
-                "normalWins: %d, normalLosses: %d, normal win rate for the past %d games: %d%%\n".formatted(normalWins, normalLosses, normalLosses + normalWins,
-                        Math.round(((double) normalWins / (double)(normalLosses + normalWins)) * 100));
+            return "summonerID: %s \n".formatted(encryptedSummonerID ) +
+                    "summonerName: %s, summonerLevel: %d , top champions: %s\n".formatted(summonerName, level, topChampion) +
+                    "rank: %s, lp: %d \n".formatted(rank, leaguePoint) +
+                    "rankedWins: %d, rankedLosses: %d, ranked win rate for the past %d games: %d%%\n".formatted( rankedWins, rankedLosses, rankedWins + rankedLosses,
+                            Math.round(((double) rankedWins / (double)(rankedLosses + rankedWins)) * 100)) +
+                    "normalWins: %d, normalLosses: %d, normal win rate for the past %d games: %d%%\n".formatted(normalWins, normalLosses, normalLosses + normalWins,
+                            Math.round(((double) normalWins / (double)(normalLosses + normalWins)) * 100));
+        } catch (NullPointerException e) {
+            System.out.println("Player is either deleted or no info was found");
+            return null;
+        }
+
     }
 }

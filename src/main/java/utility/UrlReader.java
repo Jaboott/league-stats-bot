@@ -20,7 +20,6 @@ public class UrlReader {
                 JSONArray json = new JSONArray(jsonText);
                 return json;
             }
-
         }
     }
 

@@ -10,6 +10,7 @@ public class AccessApi {
                     (baseUrl + endPoint + someId + field + "api_key=" + KeyHandler.getKey("RiotApiKey"));
             return playerData;
         } catch (IOException e) {
+            System.out.println("Cannot access api: " + (baseUrl + endPoint + someId  + "?api_key="));
             e.printStackTrace();
         }
         return null;
@@ -21,6 +22,7 @@ public class AccessApi {
                     (baseUrl + endPoint + someId  + "?api_key=" + KeyHandler.getKey("RiotApiKey"));
             return playerData;
         } catch (IOException e) {
+            System.out.println("Cannot access api: " + (baseUrl + endPoint + someId  + "?api_key="));
             e.printStackTrace();
         }
         return null;

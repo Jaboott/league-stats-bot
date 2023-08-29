@@ -3,6 +3,11 @@ package utility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class SummonerInfoGetter extends AccessApi{
 
     private final String BASE_URL = "https://na1.api.riotgames.com";
@@ -38,5 +43,22 @@ public class SummonerInfoGetter extends AccessApi{
         return topChampions;
     }
 
-
+    protected boolean playerExist(String summonerName) {
+        URL url = null;
+        try {
+            url = new URL((BASE_URL + END_POINT + summonerName  + "?api_key=" + KeyHandler.getKey("RiotApiKey")));
+            HttpURLConnection http = (HttpURLConnection)url.openConnection();
+            int statusCode = http.getResponseCode();
+            System.out.println(statusCode);
+            if (statusCode == 404) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
